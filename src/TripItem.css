@@ -1,0 +1,62 @@
+.tripCardWeb{
+  background: rgba(127,214,223,.16);
+  border: 1px solid rgba(14,165,183,.22);
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+
+.tripTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+}
+
+.tripName{
+  font-weight: 800;
+}
+
+.tripActions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.tripBudget{
+  color:#0ea5b7;
+  font-weight: 800;
+}
+
+.tripMeta{
+  margin-top: 6px;
+  color: rgba(15,23,42,.65);
+  font-size: 13px;
+}
+
+.deleteBtn{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid rgba(15,23,42,.14);
+  background: rgba(255,255,255,.7);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
+.deleteBtn:hover{
+  background: rgba(255,255,255,1);
+  border-color: rgba(15,23,42,.22);
+}
+.trip-overdue {
+  background: linear-gradient(180deg, #faf7f7 0%, #f8f4f4 100%);
+  border: 1px solid rgba(203, 213, 225, 0.6);
+  opacity: 0.9;
+}
+
+.tripOverdueLabel {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9f1239;
+}
