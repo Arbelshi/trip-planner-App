@@ -122,9 +122,7 @@ test("loads countries", async () => {
     }),
   ).toBeInTheDocument();
 
-  expect(global.fetch).toHaveBeenCalledWith(
-    "https://countriesnow.space/api/v0.1/countries/positions",
-  );
+  expect(global.fetch).toHaveBeenCalledWith("/api/countries"  );
 });
 
 test("submits a valid trip", async () => {

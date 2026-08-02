@@ -52,9 +52,7 @@ export default function AddTrip({ onAddTrip }) {
     async function loadCountries() {
       try {
         setLoadingCountries(true);
-        const res = await fetch(
-          "https://countriesnow.space/api/v0.1/countries/positions",
-        );
+        const res = await fetch("/api/countries");
         const json = await res.json();
         if (cancelled) return;
 
