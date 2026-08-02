@@ -197,7 +197,6 @@ test("AddActivity submits a valid activity", async () => {
 
   fireEvent.submit(container.querySelector("form"));
 
-  console.log(container.querySelector(".error")?.textContent);
 
   expect(onAddActivity).toHaveBeenCalledTimes(1);
 
