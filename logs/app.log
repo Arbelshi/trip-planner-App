@@ -1,0 +1,21 @@
+[2026-08-02T20:01:08.196Z] Server started on http://localhost:3001
+[2026-08-02T20:01:38.592Z] [INCOMING] GET /api/countries
+[2026-08-02T20:01:38.593Z] [OUTGOING] GET https://countriesnow.space/api/v0.1/countries/positions
+[2026-08-02T20:01:39.096Z] [EXTERNAL RESPONSE] GET https://countriesnow.space/api/v0.1/countries/positions 200
+[2026-08-02T20:01:39.183Z] [RESPONSE] GET /api/countries 200 591ms
+[2026-08-02T20:01:39.198Z] [INCOMING] GET /api/countries
+[2026-08-02T20:01:39.199Z] [OUTGOING] GET https://countriesnow.space/api/v0.1/countries/positions
+[2026-08-02T20:01:39.365Z] [EXTERNAL RESPONSE] GET https://countriesnow.space/api/v0.1/countries/positions 200
+[2026-08-02T20:01:39.458Z] [RESPONSE] GET /api/countries 304 260ms
+[2026-08-02T20:02:18.306Z] [INCOMING] GET /api/hello-world
+[2026-08-02T20:02:18.309Z] [RESPONSE] GET /api/hello-world 200 3ms
+[2026-08-02T20:02:18.674Z] [INCOMING] GET /favicon.ico
+[2026-08-02T20:02:18.675Z] [RESPONSE] GET /favicon.ico 404 1ms
+[2026-08-02T20:02:56.690Z] [INCOMING] POST /api/cities
+[2026-08-02T20:02:56.691Z] [OUTGOING] POST https://countriesnow.space/api/v0.1/countries/cities country=Albania
+[2026-08-02T20:02:56.695Z] [INCOMING] POST /api/cities
+[2026-08-02T20:02:56.695Z] [OUTGOING] POST https://countriesnow.space/api/v0.1/countries/cities country=Albania
+[2026-08-02T20:02:57.205Z] [EXTERNAL RESPONSE] POST https://countriesnow.space/api/v0.1/countries/cities 200
+[2026-08-02T20:02:57.208Z] [RESPONSE] POST /api/cities 200 513ms
+[2026-08-02T20:02:57.368Z] [EXTERNAL RESPONSE] POST https://countriesnow.space/api/v0.1/countries/cities 200
+[2026-08-02T20:02:57.371Z] [RESPONSE] POST /api/cities 200 681ms

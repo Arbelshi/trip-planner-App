@@ -122,8 +122,7 @@ test("AddActivity loads cities for the selected country", async () => {
 
   expect(global.fetch).toHaveBeenCalledTimes(1);
 
-  expect(global.fetch).toHaveBeenCalledWith(
-    "https://countriesnow.space/api/v0.1/countries/cities",
+  expect(global.fetch).toHaveBeenCalledWith("/api/cities",
     expect.objectContaining({
       method: "POST",
       headers: {
