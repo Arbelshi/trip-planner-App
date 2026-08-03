@@ -32,3 +32,11 @@ jobs:
 
       - name: Build application
         run: npm run build
+
+      - name: Upload production build
+        uses: actions/upload-artifact@v7
+        with:
+          name: trip-planner-build-${{ github.sha }}
+          path: build/
+          if-no-files-found: error
+          retention-days: 7
