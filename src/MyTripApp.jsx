@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AddTrip from "./AddTrip";
 import TripItem from "./TripItem";
 import AddActivity from "./AddActivity";
