@@ -6,3 +6,4 @@ npm-debug.log
 coverage
 security-audit.txt
 logs/app.log
+.env

@@ -1,4 +1,8 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import MyTripApp from "./MyTripApp";
 import { toast } from "react-hot-toast";
 
@@ -35,7 +39,10 @@ jest.mock("./AddTrip", () => {
 });
 
 jest.mock("./AddActivity", () => {
-  return function MockAddActivity({ onAddActivity, tripCountry }) {
+  return function MockAddActivity({
+    onAddActivity,
+    tripCountry,
+  }) {
     return (
       <div>
         <span>Country: {tripCountry}</span>
@@ -101,7 +108,10 @@ jest.mock("./TripItem", () => {
 });
 
 jest.mock("./ActivityItem", () => {
-  return function MockActivityItem({ activity, onDelete }) {
+  return function MockActivityItem({
+    activity,
+    onDelete,
+  }) {
     return (
       <div>
         <span>{activity.description}</span>
@@ -131,7 +141,9 @@ jest.mock("./TripActivitiesPanel", () => {
 
         <button
           type="button"
-          onClick={() => setCategoryFilter("Restaurant")}
+          onClick={() =>
+            setCategoryFilter("Restaurant")
+          }
         >
           Filter restaurants
         </button>
@@ -149,8 +161,10 @@ jest.mock("./BudgetPanel", () => {
     return (
       <div>
         <span>
-          Budget trip: {activeTrip ? activeTrip.name : "none"}
+          Budget trip:{" "}
+          {activeTrip ? activeTrip.name : "none"}
         </span>
+
         <span>Total budget: {totalBudget}</span>
         <span>Filtered budget: {filteredBudget}</span>
       </div>
@@ -196,21 +210,46 @@ beforeEach(() => {
   jest.clearAllMocks();
 
   window.confirm = jest.fn(() => true);
+
+  global.fetch = jest.fn().mockImplementation((url) => {
+    if (url === "/api/auth-status") {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          authenticated: true,
+          username: "arbel",
+        }),
+      });
+    }
+
+    return Promise.resolve({
+      ok: true,
+      json: async () => ({
+        data: [],
+      }),
+    });
+  });
 });
 
-test("shows the empty state when there are no trips", () => {
+test("shows the empty state when there are no trips", async () => {
   render(<MyTripApp />);
 
   expect(
-    screen.getByText("No trips yet. Create your first one."),
+    await screen.findByText(
+      "No trips yet. Create your first one.",
+    ),
   ).toBeInTheDocument();
 
   expect(
-    screen.getByText("Select a trip to see its planner."),
+    screen.getByText(
+      "Select a trip to see its planner.",
+    ),
   ).toBeInTheDocument();
 
   expect(
-    screen.getByText("Select a trip to add activities."),
+    screen.getByText(
+      "Select a trip to add activities.",
+    ),
   ).toBeInTheDocument();
 
   expect(
@@ -218,7 +257,7 @@ test("shows the empty state when there are no trips", () => {
   ).toBeInTheDocument();
 });
 
-test("loads saved trips from localStorage", () => {
+test("loads saved trips from localStorage", async () => {
   localStorage.setItem(
     "mytrip_v1",
     JSON.stringify([savedTrip]),
@@ -226,7 +265,9 @@ test("loads saved trips from localStorage", () => {
 
   render(<MyTripApp />);
 
-  expect(screen.getByText("Milan")).toBeInTheDocument();
+  expect(
+    await screen.findByText("Milan"),
+  ).toBeInTheDocument();
 
   expect(
     screen.getByRole("button", {
@@ -235,14 +276,17 @@ test("loads saved trips from localStorage", () => {
   ).toBeInTheDocument();
 });
 
-test("adds a trip and makes it active", () => {
+test("adds a trip and makes it active", async () => {
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const addTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Mock add trip",
-    }),
+    },
   );
+
+  fireEvent.click(addTripButton);
 
   expect(
     screen.getByText("Rome - active"),
@@ -265,7 +309,7 @@ test("adds a trip and makes it active", () => {
   );
 });
 
-test("selects a saved trip", () => {
+test("selects a saved trip", async () => {
   localStorage.setItem(
     "mytrip_v1",
     JSON.stringify([savedTrip]),
@@ -273,11 +317,14 @@ test("selects a saved trip", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const selectTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Select Milan",
-    }),
+    },
   );
+
+  fireEvent.click(selectTripButton);
 
   expect(
     screen.getByText("Milan - active"),
@@ -292,7 +339,7 @@ test("selects a saved trip", () => {
   ).toBeInTheDocument();
 });
 
-test("deletes a trip after confirmation", () => {
+test("deletes a trip after confirmation", async () => {
   localStorage.setItem(
     "mytrip_v1",
     JSON.stringify([savedTrip]),
@@ -300,24 +347,31 @@ test("deletes a trip after confirmation", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const deleteTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Delete Milan",
-    }),
+    },
   );
+
+  fireEvent.click(deleteTripButton);
 
   expect(window.confirm).toHaveBeenCalledWith(
     "Delete this trip?",
   );
 
-  expect(screen.queryByText("Milan")).not.toBeInTheDocument();
+  expect(
+    screen.queryByText("Milan"),
+  ).not.toBeInTheDocument();
 
   expect(
-    screen.getByText("No trips yet. Create your first one."),
+    screen.getByText(
+      "No trips yet. Create your first one.",
+    ),
   ).toBeInTheDocument();
 });
 
-test("does not delete a trip when confirmation is cancelled", () => {
+test("does not delete a trip when confirmation is cancelled", async () => {
   window.confirm = jest.fn(() => false);
 
   localStorage.setItem(
@@ -327,23 +381,31 @@ test("does not delete a trip when confirmation is cancelled", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const deleteTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Delete Milan",
-    }),
+    },
   );
 
-  expect(screen.getByText("Milan")).toBeInTheDocument();
+  fireEvent.click(deleteTripButton);
+
+  expect(
+    screen.getByText("Milan"),
+  ).toBeInTheDocument();
 });
 
-test("adds an activity to the active trip", () => {
+test("adds an activity to the active trip", async () => {
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const addTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Mock add trip",
-    }),
+    },
   );
+
+  fireEvent.click(addTripButton);
 
   expect(
     screen.getByText("No activities yet."),
@@ -368,7 +430,7 @@ test("adds an activity to the active trip", () => {
   );
 });
 
-test("deletes an activity after confirmation", () => {
+test("deletes an activity after confirmation", async () => {
   localStorage.setItem(
     "mytrip_v1",
     JSON.stringify([savedTrip]),
@@ -376,13 +438,18 @@ test("deletes an activity after confirmation", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const selectTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Select Milan",
-    }),
+    },
   );
 
-  expect(screen.getByText("Shopping")).toBeInTheDocument();
+  fireEvent.click(selectTripButton);
+
+  expect(
+    screen.getByText("Shopping"),
+  ).toBeInTheDocument();
 
   fireEvent.click(
     screen.getByRole("button", {
@@ -407,7 +474,7 @@ test("deletes an activity after confirmation", () => {
   );
 });
 
-test("shows no matching activities after applying a filter", () => {
+test("shows no matching activities after applying a filter", async () => {
   localStorage.setItem(
     "mytrip_v1",
     JSON.stringify([savedTrip]),
@@ -415,11 +482,14 @@ test("shows no matching activities after applying a filter", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const selectTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Select Milan",
-    }),
+    },
   );
+
+  fireEvent.click(selectTripButton);
 
   fireEvent.click(
     screen.getByRole("button", {
@@ -428,11 +498,13 @@ test("shows no matching activities after applying a filter", () => {
   );
 
   expect(
-    screen.getByText("No activities match the filters."),
+    screen.getByText(
+      "No activities match the filters.",
+    ),
   ).toBeInTheDocument();
 });
 
-test("saves trips to localStorage", () => {
+test("saves trips to localStorage", async () => {
   const setItemSpy = jest.spyOn(
     Storage.prototype,
     "setItem",
@@ -440,11 +512,14 @@ test("saves trips to localStorage", () => {
 
   render(<MyTripApp />);
 
-  fireEvent.click(
-    screen.getByRole("button", {
+  const addTripButton = await screen.findByRole(
+    "button",
+    {
       name: "Mock add trip",
-    }),
+    },
   );
+
+  fireEvent.click(addTripButton);
 
   expect(setItemSpy).toHaveBeenCalledWith(
     "mytrip_v1",

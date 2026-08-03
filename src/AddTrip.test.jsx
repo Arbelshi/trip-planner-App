@@ -21,6 +21,7 @@ afterEach(() => {
 
 function mockCountries(countries = ["Israel", "Italy"]) {
   global.fetch = jest.fn().mockResolvedValue({
+    ok: true,
     json: jest.fn().mockResolvedValue({
       data: countries.map((name) => ({ name })),
     }),
@@ -122,7 +123,12 @@ test("loads countries", async () => {
     }),
   ).toBeInTheDocument();
 
-  expect(global.fetch).toHaveBeenCalledWith("/api/countries"  );
+  expect(global.fetch).toHaveBeenCalledWith(
+    "/api/countries",
+    {
+      credentials: "include",
+    },
+  );
 });
 
 test("submits a valid trip", async () => {
@@ -377,7 +383,7 @@ test("shows an error when loading countries fails", async () => {
   render(<AddTrip onAddTrip={jest.fn()} />);
 
   expect(
-    await screen.findByText("Failed to load countries"),
+    await screen.findByText("Network error"),
   ).toBeInTheDocument();
 
   await waitFor(() => {

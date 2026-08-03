@@ -19,3 +19,36 @@
 [2026-08-02T20:02:57.208Z] [RESPONSE] POST /api/cities 200 513ms
 [2026-08-02T20:02:57.368Z] [EXTERNAL RESPONSE] POST https://countriesnow.space/api/v0.1/countries/cities 200
 [2026-08-02T20:02:57.371Z] [RESPONSE] POST /api/cities 200 681ms
+[2026-08-03T18:00:18.018Z] Server started on http://localhost:3001
+[2026-08-03T18:10:47.115Z] Server started on http://localhost:3001
+[2026-08-03T18:13:38.510Z] Server started on http://localhost:3001
+[2026-08-03T18:17:26.686Z] Server started on http://localhost:3001
+[2026-08-03T18:21:21.903Z] Server started on http://localhost:3001
+[2026-08-03T18:21:34.214Z] [INCOMING] GET /
+[2026-08-03T18:21:34.224Z] [RESPONSE] GET / 404 10ms
+[2026-08-03T18:22:00.794Z] [INCOMING] GET /api/auth-status
+[2026-08-03T18:22:00.797Z] [RESPONSE] GET /api/auth-status 200 3ms
+[2026-08-03T18:22:00.810Z] [INCOMING] GET /api/auth-status
+[2026-08-03T18:22:00.812Z] [RESPONSE] GET /api/auth-status 304 2ms
+[2026-08-03T18:22:38.132Z] [INCOMING] POST /api/login
+[2026-08-03T18:22:38.133Z] [LOGIN FAILED] Invalid credentials for username=arbel
+[2026-08-03T18:22:38.133Z] [RESPONSE] POST /api/login 401 1ms
+[2026-08-03T18:22:47.535Z] [INCOMING] POST /api/login
+[2026-08-03T18:22:47.535Z] [LOGIN SUCCESS] username=arbel
+[2026-08-03T18:22:47.540Z] [RESPONSE] POST /api/login 200 5ms
+[2026-08-03T18:22:47.929Z] [INCOMING] GET /api/countries
+[2026-08-03T18:22:47.929Z] [OUTGOING] GET https://countriesnow.space/api/v0.1/countries/positions
+[2026-08-03T18:22:48.429Z] [EXTERNAL RESPONSE] GET https://countriesnow.space/api/v0.1/countries/positions 200
+[2026-08-03T18:22:48.515Z] [RESPONSE] GET /api/countries 304 586ms
+[2026-08-03T18:22:48.521Z] [INCOMING] GET /api/countries
+[2026-08-03T18:22:48.521Z] [OUTGOING] GET https://countriesnow.space/api/v0.1/countries/positions
+[2026-08-03T18:22:48.698Z] [EXTERNAL RESPONSE] GET https://countriesnow.space/api/v0.1/countries/positions 200
+[2026-08-03T18:22:48.787Z] [RESPONSE] GET /api/countries 304 266ms
+[2026-08-03T18:23:52.989Z] [INCOMING] POST /api/cities
+[2026-08-03T18:23:52.989Z] [OUTGOING] POST https://countriesnow.space/api/v0.1/countries/cities country=Japan
+[2026-08-03T18:23:52.993Z] [INCOMING] POST /api/cities
+[2026-08-03T18:23:52.993Z] [OUTGOING] POST https://countriesnow.space/api/v0.1/countries/cities country=Japan
+[2026-08-03T18:23:53.520Z] [EXTERNAL RESPONSE] POST https://countriesnow.space/api/v0.1/countries/cities 200
+[2026-08-03T18:23:53.619Z] [RESPONSE] POST /api/cities 200 630ms
+[2026-08-03T18:23:53.683Z] [EXTERNAL RESPONSE] POST https://countriesnow.space/api/v0.1/countries/cities 200
+[2026-08-03T18:23:53.772Z] [RESPONSE] POST /api/cities 200 779ms

@@ -10,6 +10,7 @@ export default function AddTrip({ onAddTrip }) {
   const [budget, setBudget] = useState("");
   const [error, setError] = useState("");
   const [currency, setCurrency] = useState("€");
+  
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -46,35 +47,52 @@ export default function AddTrip({ onAddTrip }) {
     setCurrency("€");
   }
 
-  useEffect(() => {
-    let cancelled = false;
+    useEffect(() => {
+      let cancelled = false;
 
-    async function loadCountries() {
-      try {
-        setLoadingCountries(true);
-        const res = await fetch("/api/countries");
-        const json = await res.json();
-        if (cancelled) return;
+      async function loadCountries() {
+        try {
+          setLoadingCountries(true);
 
-        const list = (json?.data || [])
-          .map((x) => x?.name)
-          .filter(Boolean)
-          .sort((a, b) => a.localeCompare(b));
+          const response = await fetch("/api/countries", {
+            credentials: "include",
+          });
 
-        setCountries(list);
-      } catch (e) {
-        console.error(e);
-        if (!cancelled) setError("Failed to load countries");
-      } finally {
-        if (!cancelled) setLoadingCountries(false);
+          const json = await response.json();
+
+          if (!response.ok) {
+            throw new Error(json.error || "Failed to load countries");
+          }
+
+          if (cancelled) {
+            return;
+          }
+
+          const list = (json?.data || [])
+            .map((item) => item?.name)
+            .filter(Boolean)
+            .sort((a, b) => a.localeCompare(b));
+
+          setCountries(list);
+        } catch (error) {
+          console.error("Failed to load countries:", error);
+
+          if (!cancelled) {
+            setError(error.message || "Failed to load countries");
+          }
+        } finally {
+          if (!cancelled) {
+            setLoadingCountries(false);
+          }
+        }
       }
-    }
 
-    loadCountries();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+      loadCountries();
+
+      return () => {
+        cancelled = true;
+      };
+    }, []);
 
   return (
     <form className="formGrid" onSubmit={handleSubmit}>

@@ -18,11 +18,12 @@ export default function AddActivity({ onAddActivity, tripCountry }) {
   const [isReserved, setIsReserved] = useState(false);
   const [priority, setPriority] = useState("Optional");
 
-  useEffect(() => {
+    useEffect(() => {
     let cancelled = false;
 
     async function loadCities() {
       setError("");
+
       if (!tripCountry) {
         setCities([]);
         setCity("");
@@ -34,28 +35,42 @@ export default function AddActivity({ onAddActivity, tripCountry }) {
         setLoadingCities(true);
         setCity("");
 
-      const res = await fetch("/api/cities", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          country: tripCountry,
-        }),
-      });
+        const response = await fetch("/api/cities", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            country: tripCountry,
+          }),
+        });
 
-        const json = await res.json();
-        if (cancelled) return;
+        const json = await response.json();
+
+        if (!response.ok) {
+          throw new Error(json.error || "Failed to load cities");
+        }
+
+        if (cancelled) {
+          return;
+        }
 
         const list = (json?.data || [])
           .filter(Boolean)
           .sort((a, b) => a.localeCompare(b));
+
         setCities(list);
-      } catch (e) {
-        console.error(e);
-        if (!cancelled) setError("Failed to load cities");
+      } catch (error) {
+        console.error("Failed to load cities:", error);
+
+        if (!cancelled) {
+          setError(error.message || "Failed to load cities");
+        }
       } finally {
-        if (!cancelled) setLoadingCities(false);
+        if (!cancelled) {
+          setLoadingCities(false);
+        }
       }
     }
 
@@ -65,6 +80,7 @@ export default function AddActivity({ onAddActivity, tripCountry }) {
       cancelled = true;
     };
   }, [tripCountry]);
+
 
   function handleSubmit(event) {
     event.preventDefault();
