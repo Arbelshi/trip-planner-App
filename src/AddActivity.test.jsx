@@ -17,6 +17,7 @@ beforeEach(() => {
   });
 
   global.fetch = jest.fn().mockResolvedValue({
+    ok: true,
     json: jest.fn().mockResolvedValue({
       data: ["Rome", "Milan"],
     }),
@@ -122,12 +123,14 @@ test("AddActivity loads cities for the selected country", async () => {
 
   expect(global.fetch).toHaveBeenCalledTimes(1);
 
-  expect(global.fetch).toHaveBeenCalledWith("/api/cities",
+  expect(global.fetch).toHaveBeenCalledWith(
+    "/api/cities",
     expect.objectContaining({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         country: "Italy",
       }),
