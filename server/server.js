@@ -6,7 +6,9 @@ const path = require("path");
 const session = require("express-session");
 
 const app = express();
+
 const PORT = process.env.PORT || 3001;
+const SESSION_MAX_AGE_MS = 1000 * 60 * 60;
 
 const logsDirectory = path.join(__dirname, "..", "logs");
 const logFilePath = path.join(logsDirectory, "app.log");
@@ -33,9 +35,7 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-
-      // השארנו את המספר הזה לצורך Code Review
-      maxAge: 1000 * 60 * 60,
+      maxAge: SESSION_MAX_AGE_MS,
     },
   }),
 );
@@ -79,7 +79,7 @@ function requireAuthentication(req, res, next) {
  * בדיקה שהשרת עובד
  */
 app.get("/api/hello-world", (req, res) => {
-  res.json({
+  return res.json({
     message: "Hello World",
   });
 });
@@ -98,11 +98,27 @@ app.post("/api/login", (req, res) => {
     });
   }
 
-  const isValidUsername = username === process.env.APP_USERNAME;
-  const isValidPassword = password === process.env.APP_PASSWORD;
+  const users = [
+    {
+      username: process.env.ARBEL_USERNAME,
+      password: process.env.ARBEL_PASSWORD,
+    },
+    {
+      username: process.env.ZOYA_USERNAME,
+      password: process.env.ZOYA_PASSWORD,
+    },
+  ];
 
-  if (!isValidUsername || !isValidPassword) {
-    writeLog(`[LOGIN FAILED] Invalid credentials for username=${username}`);
+  const matchedUser = users.find(
+    (user) =>
+      user.username === username &&
+      user.password === password,
+  );
+
+  if (!matchedUser) {
+    writeLog(
+      `[LOGIN FAILED] Invalid credentials for username=${username}`,
+    );
 
     return res.status(401).json({
       error: "Invalid username or password",
@@ -110,13 +126,13 @@ app.post("/api/login", (req, res) => {
   }
 
   req.session.authenticated = true;
-  req.session.username = username;
+  req.session.username = matchedUser.username;
 
-  writeLog(`[LOGIN SUCCESS] username=${username}`);
+  writeLog(`[LOGIN SUCCESS] username=${matchedUser.username}`);
 
   return res.json({
     message: "Login successful",
-    username,
+    username: matchedUser.username,
   });
 });
 
@@ -253,7 +269,9 @@ app.post(
   },
 );
 
-
+/*
+ * נתיב שלא קיים
+ */
 app.use((req, res) => {
   return res.status(404).json({
     error: "Route not found",
